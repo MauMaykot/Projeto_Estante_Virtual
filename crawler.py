@@ -16,112 +16,130 @@ f = open(filename, "w", encoding="utf-8")
 headers = "Titulo; Tipo; Editora; Ano; Estante; Peso; ISBN; Idioma; Cadastrado; Descricao; Data\n"
 f.write(headers)
 
+wait = WebDriverWait(driver, 20)
+
+links_biografias = []
+links_biografias_especificas = []
+
 #pegar os links das biografias e mudar de pág.#
 
-links = []
+#while True:
 
-while True:
+dados = driver.find_elements_by_xpath('//a[@class="busca-box m-group ga_tracking_event desktop"]')
 
-    dados = driver.find_elements_by_xpath('//a[@class="busca-box m-group ga_tracking_event desktop"]')
+for i in dados:
 
-    for i in dados:
+    links_biografias.append(i.get_attribute('href'))       
+    print(links_biografias)
 
-        links.append(i.get_attribute('href'))       
-        print(links)
+    #botao = driver.find_element_by_xpath('//a[@aria-label="próxima"]')
+    #botao.click()
 
-    botao = driver.find_element_by_xpath('//a[@aria-label="próxima"]')
-    botao.click()
-
-    sleep(5)    
+    #sleep(5)    
 
 #pegar os links da biografia específica e mudar de pág.#
 
-links = []
+dados = driver.find_elements_by_xpath('//a[@aria-label="exemplar"]')
 
-while True:
+for linkbylink_biografias in links_biografias:
+    driver.get(linkbylink_biografias)
 
-    dados = driver.find_elements_by_xpath('//a[@aria-label="exemplar"]')
+    #while True:
 
     for i in dados:
 
-        links.append(i.get_attribute('href'))       
-        print(links)
+        links_biografias_especificas.append(i.get_attribute('href'))       
+        print(links_biografias_especificas)
 
-    for i in range(10):
-        driver.execute_script("window.scrollBy(0,500)","")
-        sleep(1)
+        #for i in range(10):
+            #driver.execute_script("window.scrollBy(0,500)","")
+            #sleep(1)
+        #try:
+            #botao = driver.find_element_by_xpath('//a[@aria-label="proxima"]')
+            #botao.click()
+            #sleep(8)
+        #except:
+            #pass
+
+# fazer a coleta dos dados
+
+for linkbylink_biografias_especificas in links_biografias_especificas:
+    driver.get(linkbylink_biografias_especificas)
     try:
-        botao = driver.find_element_by_xpath('//a[@aria-label="proxima"]')
-        botao.click()
-        sleep(8)
+        titulo = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/h1[@class="livro-titulo col-12"]'))).text
+        print(titulo)
     except:
         pass
 
-#ver se está pegando as informações
+    try:
+        tipo = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/p[@class="type m-used info-type"]'))).text
+        print(tipo)
+    except:
+        pass
 
-'''
-dados = driver.find_elements_by_xpath('//body[@class="  sticky"]')
+    try:
+        editora = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/p[@class="livro-specs info-publisher"]'))).text
+        print(editora)
+    except:
+        pass
 
-for dado in dados:
-    nome = dado.find_element_by_xpath('.//h1[@class="livro-titulo col-12"]').text 
-    tipo = dado.find_element_by_xpath('.//p[@class="type m-used info-type"]').text
-    ano = dado.find_element_by_xpath('.//p[@class="livro-specs info-year"]').text
-    estante = dado.find_element_by_xpath('.//p[@class="livro-specs info-shelf"]').text
-    peso = dado.find_element_by_xpath('.//p[@class="livro-specs info-weight"]').text
-    ISBN = dado.find_element_by_xpath('.//p[@class="livro-specs info-isbn"]').text
-    idioma = dado.find_element_by_xpath('.//p[@class="livro-specs info-language"]').text
-    cadastrado = dado.find_element_by_xpath('.//p[@class="livro-specs info-time"]').text
-    descricao = dado.find_element_by_xpath('.//span[@class="description-text"]').text 
-    #print(titulo)
-    #print(tipo)
-    #print(editora)
-    #print(ano)
-    #print(estante)
-    #print(peso)
-    #print(ISBN)
-    #print(idioma)
-    #print(cadastrado)
-    #print(descricao)
-'''
-# fazer a coleta dos dados
+    try:
+        ano = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/p[@class="livro-specs info-year"]'))).text
+        print(ano)
+    except:
+        pass
 
-wait = WebDriverWait(driver, 10)
+    try:
+        estante = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/p[@class="livro-specs info-shelf"]'))).text
+        print(estante)
+    except:
+        pass
 
-for linkbylink in links:
-    driver.get(linkbylink)
+    try:
+        peso = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/p[@class="livro-specs info-weight"]'))).text
+        print(peso)
+    except:
+        pass
 
-    titulo = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/h1[@class="livro-titulo col-12"]'))).text
+    try:
+        ISBN = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/p[@class="livro-specs info-isbn"]'))).text
+        print(ISBN)
+    except:
+        pass
 
-    tipo = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/p[@class="type m-used info-type"]'))).text
+    try:
+        idioma = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/p[@class="livro-specs info-language"]'))).text
+        print(idioma)
+    except:
+        pass
 
-    editora = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/p[@class="livro-specs info-publisher"]'))).text
+    try:
+        cadastrado = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/p[@class="livro-specs info-time"]'))).text
+        print(cadastrado)
+    except:
+        pass
 
-    ano = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/p[@class="livro-specs info-year"]'))).text
+    try:
+        descricao = wait.until(EC.presence_of_element_located(
+                                (By.XPATH, './/span[@class="description-text"]'))).text
+        print(descricao)
+    except:
+        pass
 
-    estante = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/p[@class="livro-specs info-shelf"]'))).text
-
-    peso = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/p[@class="livro-specs info-weight"]'))).text
-
-    ISBN = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/p[@class="livro-specs info-isbn"]'))).text
-
-    idioma = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/p[@class="livro-specs info-language"]'))).text
-
-    cadastrado = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/p[@class="livro-specs info-time"]'))).text
-
-    descricao = wait.until(EC.presence_of_element_located(
-                            (By.XPATH, './/span[@class="description-text"]'))).text
-
-    dat = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #print("Data: " + dat)
+    try:
+        dat = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print("Data: " + dat)
+    except:
+        pass
 
     f.write(titulo + ";" + tipo + ";" + editora + ";" + ano + ";" + estante + ";" + peso + ";" + ISBN + ";" + idioma + ";" + cadastrado + ";" + descricao + ";" + "\n")
 
