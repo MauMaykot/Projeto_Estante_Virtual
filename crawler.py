@@ -23,19 +23,21 @@ links_biografias_especificas = []
 
 #pegar os links das biografias e mudar de pág.#
 
-#while True:
+while True:
 
-dados = driver.find_elements_by_xpath('//a[@class="busca-box m-group ga_tracking_event desktop"]')
+    dados = driver.find_elements_by_xpath('//a[@class="busca-box m-group ga_tracking_event desktop"]')
+    
+    for i in dados:
+        links_biografias.append(i.get_attribute('href'))       
+        print(links_biografias)
 
-for i in dados:
+    try:
+        botao = driver.find_element_by_xpath('//a[@aria-label="próxima"]')
+        botao.click()
+        sleep(5)
+    except:
+        pass
 
-    links_biografias.append(i.get_attribute('href'))       
-    print(links_biografias)
-
-    #botao = driver.find_element_by_xpath('//a[@aria-label="próxima"]')
-    #botao.click()
-
-    #sleep(5)    
 
 #pegar os links da biografia específica e mudar de pág.#
 
@@ -44,22 +46,22 @@ dados = driver.find_elements_by_xpath('//a[@aria-label="exemplar"]')
 for linkbylink_biografias in links_biografias:
     driver.get(linkbylink_biografias)
 
-    #while True:
+    while True:
 
-    for i in dados:
+        for i in dados:
 
-        links_biografias_especificas.append(i.get_attribute('href'))       
-        print(links_biografias_especificas)
+            links_biografias_especificas.append(i.get_attribute('href'))       
+            print(links_biografias_especificas)
 
-        #for i in range(10):
-            #driver.execute_script("window.scrollBy(0,500)","")
-            #sleep(1)
-        #try:
-            #botao = driver.find_element_by_xpath('//a[@aria-label="proxima"]')
-            #botao.click()
-            #sleep(8)
-        #except:
-            #pass
+            for i in range(10):
+                driver.execute_script("window.scrollBy(0,500)","")
+                sleep(1)
+            try:
+                botao = driver.find_element_by_xpath('//a[@aria-label="proxima"]')
+                botao.click()
+                sleep(8)
+            except:
+                pass
 
 # fazer a coleta dos dados
 
