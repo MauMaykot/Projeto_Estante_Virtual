@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import csv
 from datetime import datetime
 
-driver = webdriver.Chrome(executable_path=r"C:\Users\mauricio.gomes\Desktop\Projeto_Estante_Virtual/chromedriver.exe")
+driver = webdriver.Chrome(executable_path=r"C:\Program Files (x86)/chromedriver.exe")
 driver.maximize_window()
 driver.get('https://www.estantevirtual.com.br/estante/biografias')
 
@@ -21,33 +21,45 @@ wait = WebDriverWait(driver, 20)
 links_biografias = []
 links_biografias_especificas = []
 
+nome_classe_botao_next = []
+#url = driver.current_url
+
 #pegar os links das biografias e mudar de pág.#
 
 while True:
 
-    dados = driver.find_elements_by_xpath('//a[@class="busca-box m-group ga_tracking_event desktop"]')
+    links = driver.find_elements_by_xpath('//a[@class="busca-box m-group ga_tracking_event desktop"]')
+
+    for i in links:
+        links_biografias.append(i.get_attribute('href'))    
+        #print(links_biografias)
+
+    lista = driver.find_elements_by_xpath('//nav//ul[@class="pagination"]//li')
     
-    for i in dados:
-        links_biografias.append(i.get_attribute('href'))       
-        print(links_biografias)
+    for i in lista:
+        nome_classe_botao_next.append(i.get_attribute('class'))
 
     try:
         botao = driver.find_element_by_xpath('//a[@aria-label="próxima"]')
         botao.click()
         sleep(5)
+
+        if nome_classe_botao_next[-1] == "m-next":
+            pass
+        else:
+            break
     except:
         pass
 
-
 #pegar os links da biografia específica e mudar de pág.#
-
-dados = driver.find_elements_by_xpath('//a[@aria-label="exemplar"]')
 
 for linkbylink_biografias in links_biografias:
     driver.get(linkbylink_biografias)
 
     while True:
-
+        
+        dados = driver.find_elements_by_xpath('//a[@aria-label="exemplar"]')
+        
         for i in dados:
 
             links_biografias_especificas.append(i.get_attribute('href'))       
